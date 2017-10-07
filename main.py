@@ -1,32 +1,29 @@
 #!/usr/bin/env python3
 
+from sys import argv
 import requests
 from bs4 import BeautifulSoup
 
-####### Example 1
-
-# resp = requests.get("https://encrypted.google.com/async/flights_origin_destination?async=origin:CCU,destination:BLR,departure_date:2017-10-14,return_date:2017-10-20,is_oneway:false")
-
-# content = resp.content
-# soup = BeautifulSoup(content, "html.parser")
-
-# for s in soup:
-#  print(s[2])
-
-# print("style" in soup)
-
-
-####### Example 2 #######
-
 # Variable initialize
 BASE_URL = "https://rubygarage.org"
-PAGE_NUMBER = "1"
-PAGE_QUERY = "?page=" + PAGE_NUMBER
-BLOG_URL = BASE_URL + "/blog" + PAGE_QUERY
+PAGE_QUERY = ""
 data = {}
 tag = {}
 
+# read comman line
+for i in range(len(argv)):
+    if i == 1 and argv[i] == "-p" or argv[i] == "-page":
+        PAGE_QUERY = "page={}".format(argv[i+1])
+        break
+    else:
+        PAGE_QUERY = "page=1"
+
+# make blog url       
+BLOG_URL = BASE_URL + "/blog?" + PAGE_QUERY
+
+# request blog
 rBlog = requests.get(BLOG_URL)
+# get blog content(html)
 rBlogContent = rBlog.content
 
 # Soup insrance containing blog cotent
@@ -37,7 +34,7 @@ cardItmes = soup.findAll("div", { "class": "card-item"})
 
 # Loop througth card items
 for cardItme in cardItmes:
-    # grabi tag logo
+    # grab tag logo
     data["logo"] = cardItme.find("img")["src"]
     # extract title using class
     cardBlogTitle = cardItme.find("div", { "class": "card-blog__title"})
