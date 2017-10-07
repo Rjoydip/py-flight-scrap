@@ -1,6 +1,6 @@
-# py-flight-scrap
+# py-rubygarage-scrap
 
-> 
+> Ruby garage blog, tag scrap using python
 
 ## Running Locally
 
